@@ -28,6 +28,7 @@ class Gui:
                                                                      highlightcolor='#000000',height=50, bg='#FFFFFF')
                         d.grid(row=i * 3 + k, column=l + 3 * j, rowspan=1, columnspan=1)
         self.update()
+        self.repaint_background()
         self.add_bindings()
 
 
@@ -36,15 +37,28 @@ class Gui:
             for j in range(0, self.game.width):
                 d = self.cells[i][j]
 
-                def handler(event, cells = self.cells, i=i, j=j, gui = self):
-                    return util.cell_clicked(event,cells, i, j, gui)
+                def handler(event, cells=self.cells, i=i, j=j, gui=self):
+                    return util.cell_clicked(event, cells, i, j, gui)
                 d.bind('<ButtonPress-1>', handler)
+
+                def handler_b(event, gui=self):
+                    return util.number_clicked_handler(event, gui)
+
+                d.focus_force()
+                d.bind('<KeyPress>', handler_b)
 
     def update(self):
         for i in range(0, self.game.height):
             for j in range(0, self.game.width):
                 d = self.cells[i][j]
                 d.delete("all")
-                d.configure(bg="#FFFFFF")
                 d.create_text(25, 25, fill="#000000", font="Times 20 italic bold",
                                    text="" if self.game.board[i][j] == 0 else str(self.game.board[i][j]))
+
+    def repaint_background(self):
+        for i in range(0, self.game.height):
+            for j in range(0, self.game.width):
+                d = self.cells[i][j]
+                d.configure(bg="#FFFFFF")
+                if self.game.preset[i][j]:
+                    d.configure(bg="#faf1a5")

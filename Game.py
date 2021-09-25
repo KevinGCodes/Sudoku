@@ -59,7 +59,7 @@ class Game:
                 return False
         square_x = math.floor(j/3)
         square_y = math.floor(i/3)
-        for a in range(0,3):
+        for a in range(0, 3):
             for b in range(0, 3):
                 row = square_y * 3 + a
                 col = square_x * 3 + b
