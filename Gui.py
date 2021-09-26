@@ -10,20 +10,38 @@ class Gui:
         self.game = game
         self.selected_cell = None
         self.t = tk.Tk()
+        self.t.resizable(False,False)
         self.t.title('Sudoku')
         self.cells = [[None for i in range(0, self.game.width)]
                       for j in range(0, self.game.height)]
         self.create_widgets()
 
     def create_widgets(self):
-        self.cnv = tk.Canvas(self.t, width=450, height=450, bg='#3b2275')
+        self.cnv = tk.Canvas(self.t, bg='#3b2275')
         self.cnv.grid(columnspan=9, rowspan=9)
         self.init_grid()
         solve_button = tk.Button(self.cnv, text="Solve Sudoku!", command=self.solve_button_pressed)
-        solve_button.grid(column=10, row=0, columnspan=5)
+        solve_button.grid(column=10, row=0, columnspan=3)
+        self.solve_label = tk.Label(self.cnv, text="", bg='#3b2275')
+        self.solve_label.grid(column=10, row=1)
 
-        generate_button = tk.Button(self.cnv, text="Generate new Game!", comman=self.generate_button_pressed)
-        generate_button.grid(column=10, row=3)
+        generate_button = tk.Button(self.cnv, text="Generate new Game!", command=self.generate_button_pressed)
+        generate_button.grid(column=10, row=3, columnspan=3)
+
+        is_solved_button = tk.Button(self.cnv, text="Check if Sudoku is solved", command= self.is_solved_button_pressed)
+        is_solved_button.grid(column=10,row=5, columnspan=3)
+        self.is_solved_label = tk.Label(self.cnv, text="", bg='#3b2275')
+        self.is_solved_label.grid(column=10,row=6)
+
+        note_message = tk.Message(self.cnv,bg='#3b2275', text="Note: the states are generated randomly and are not necessarily "
+                                                 "solvable. "
+                                                 "A bad state can lead to a long loop which can make the program crash.")
+        note_message.grid(column=10, row=7, rowspan=3)
+
+    def is_solved_button_pressed(self):
+        is_solved = self.game.is_solved()
+        text = "Sudoku is correctly solved!" if is_solved else "Solution is incorrect"
+        self.is_solved_label.configure(text=text)
 
     def solve_button_pressed(self):
         solver = sudoku_solver.sudoku_solver(self.game)
@@ -32,9 +50,10 @@ class Gui:
             self.update()
             self.game.visualize()
         else:
-            print("There is no solution to this Sudoku!")
+            self.solve_label.configure(text="There is no solution to this state of the Sudoku!")
 
     def generate_button_pressed(self):
+        self.solve_label.configure(text="")
         self.game.randomize()
         self.update()
         self.repaint_background()

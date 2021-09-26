@@ -60,7 +60,7 @@ class Game:
         for i in range(0, self.height):
             for j in range(0, self.width):
                 if self.preset[i][j]: continue
-                if not self.preset[i][j] and self.board[i][j] == 0:
+                if self.board[i][j] == 0:
                     return (i, j)
 
         return None

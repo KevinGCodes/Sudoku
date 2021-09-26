@@ -5,24 +5,25 @@ class sudoku_solver:
 
     def __init__(self, game):
         self.game = game
-        self.solution = [[0 for i in range(0, game.width)] for j in range(0, game.height)]
+        self.solution = [[0 for i in range(0, self.game.width)] for j in range(0, self.game.height)]
 
     def solve_recursive_helper(self, i, j, cells_left):
-        if cells_left == 0 or i >= self.game.height or j >= self.game.width:
-            if self.game.is_solved():
-                self.game.visualize()
-                self.solution = [[self.game.board[k][l] for k in range(0, self.game.width)] for l in
-                                 range(0, self.game.height)]
-                return True
-
-        elif self.game.preset[i][j]:
+        if cells_left == 0 and self.game.is_solved():
+            for row in range(0, self.game.height):
+                for col in range(0, self.game.width):
+                    self.solution[row][col] = self.game.board[row][col]
+            return True
+        elif cells_left > 0 and self.game.board[i][j] != 0:
+            if not self.game.can_be_placed(i, j, self.game.board[i][j]):
+                return False
             if j < self.game.width - 1:
                 if self.solve_recursive_helper(i, j + 1, cells_left - 1):
                     return True
             else:
                 if self.solve_recursive_helper(i + 1, 0, cells_left - 1):
                     return True
-        else:
+
+        elif cells_left > 0:
             for num in range(1, 10):
                 if not self.game.can_be_placed(i, j, num):
                     continue
@@ -37,7 +38,13 @@ class sudoku_solver:
         return False
 
     def solve(self):
+        for row in range(0, self.game.height):
+            for col in range(0, self.game.width):
+                self.solution[row][col] = 0
         res = self.solve_recursive_helper(0, 0, self.game.width * self.game.height)
         if res:
-            self.game.board = self.solution
+            for row in range(0, self.game.height):
+                for col in range(0, self.game.width):
+                    self.game.board[row][col] = self.solution[row][col]
         return res
+
