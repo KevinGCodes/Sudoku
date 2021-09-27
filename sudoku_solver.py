@@ -1,6 +1,5 @@
 import math
 
-
 class sudoku_solver:
 
     def __init__(self, game):
@@ -41,6 +40,7 @@ class sudoku_solver:
         for row in range(0, self.game.height):
             for col in range(0, self.game.width):
                 self.solution[row][col] = 0
+
         res = self.solve_recursive_helper(0, 0, self.game.width * self.game.height)
         if res:
             for row in range(0, self.game.height):

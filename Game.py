@@ -11,17 +11,7 @@ class Game:
         self.height = n
         self.board = [[0 for i in range(0, self.width)] for j in range(0, self.height)]
         self.preset = [[False for i in range(0, self.width)] for j in range(0, self.height)]
-        print(self.randomize())
-
-    def visualize(self):
-        for i in range(0, self.width):
-            print("")
-            if i % 3 == 0:
-                print('------------------')
-            for j in range(0, self.height):
-                if j % 3 == 0:
-                    print(' | ', end="")
-                print(self.board[i][j], end="")
+        self.randomize()
 
     def randomize(self):
         possible_amount_of_clues = [18, 19, 20]
@@ -55,15 +45,6 @@ class Game:
                 if not self.can_be_placed(i, j, self.board[i][j]):
                     return False
         return True
-
-    def get_free_cell(self):
-        for i in range(0, self.height):
-            for j in range(0, self.width):
-                if self.preset[i][j]: continue
-                if self.board[i][j] == 0:
-                    return (i, j)
-
-        return None
 
     def enter_number(self, i, j, num):
         if self.preset[i][j]:
