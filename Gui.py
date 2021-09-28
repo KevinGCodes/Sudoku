@@ -1,8 +1,8 @@
 import tkinter as tk
-import Util as util
-import Game
-import sudoku_solver
+
 import ButtonHandlers as bh
+import Util as util
+
 
 class Gui:
 
@@ -14,8 +14,8 @@ class Gui:
         self.solve_label = tk.Label(self.cnv, text="", bg='#3b2275')
         self.t.resizable(False, False)
         self.t.title('Sudoku')
-        self.cells = [[None for i in range(0, self.game.width)]
-                      for j in range(0, self.game.height)]
+        self.cells = [[None for i in range(self.game.width)]
+                      for j in range(self.game.height)]
         self.create_widgets()
 
     def create_widgets(self):
@@ -25,10 +25,12 @@ class Gui:
         solve_button.grid(column=10, row=0, columnspan=3)
         self.solve_label.grid(column=10, row=1)
 
-        generate_button = tk.Button(self.cnv, text="Generate new Game!", command=lambda: bh.generate_button_pressed(self))
+        generate_button = tk.Button(self.cnv, text="Generate new Game!",
+                                    command=lambda: bh.generate_button_pressed(self))
         generate_button.grid(column=10, row=3, columnspan=3)
 
-        is_solved_button = tk.Button(self.cnv, text="Check if Sudoku is solved", command=lambda: bh.is_solved_button_pressed(self))
+        is_solved_button = tk.Button(self.cnv, text="Check if Sudoku is solved",
+                                     command=lambda: bh.is_solved_button_pressed(self))
         is_solved_button.grid(column=10, row=5, columnspan=3)
         self.is_solved_label = tk.Label(self.cnv, text="", bg='#3b2275')
         self.is_solved_label.grid(column=10, row=6)
@@ -41,13 +43,13 @@ class Gui:
 
     def init_grid(self):
 
-        for i in range(0, 3):
-            for j in range(0, 3):
+        for i in range(3):
+            for j in range(3):
                 c = tk.Canvas(self.cnv, width=150, height=150, highlightbackground='#000000',
                               highlightcolor='#000000', bg='#000000', bd=0)
                 c.grid(row=i * 3, column=j * 3, columnspan=3, rowspan=3, ipadx=0, pady=0)
-                for k in range(0, 3):
-                    for l in range(0, 3):
+                for k in range(3):
+                    for l in range(3):
                         d = self.cells[i * 3 + k][j * 3 + l] = tk.Canvas(self.cnv, width=50,
                                                                          highlightbackground='#000000',
                                                                          highlightcolor='#000000', height=50,
@@ -58,8 +60,8 @@ class Gui:
         self.add_bindings()
 
     def add_bindings(self):
-        for i in range(0, self.game.height):
-            for j in range(0, self.game.width):
+        for i in range(self.game.height):
+            for j in range(self.game.width):
                 d = self.cells[i][j]
 
                 def handler(event, cells=self.cells, i=i, j=j, gui=self):
@@ -74,16 +76,16 @@ class Gui:
                 d.bind('<KeyPress>', handler_b)
 
     def update(self):
-        for i in range(0, self.game.height):
-            for j in range(0, self.game.width):
+        for i in range(self.game.height):
+            for j in range(self.game.width):
                 d = self.cells[i][j]
                 d.delete("all")
                 d.create_text(25, 25, fill="#000000", font="Times 20 italic bold",
                               text="" if self.game.board[i][j] == 0 else str(self.game.board[i][j]))
 
     def repaint_background(self):
-        for i in range(0, self.game.height):
-            for j in range(0, self.game.width):
+        for i in range(self.game.height):
+            for j in range(self.game.width):
                 d = self.cells[i][j]
                 d.configure(bg="#FFFFFF")
                 if self.game.preset[i][j]:

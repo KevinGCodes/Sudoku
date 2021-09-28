@@ -1,10 +1,8 @@
-import math
-
 class sudoku_solver:
 
     def __init__(self, game):
         self.game = game
-        self.solution = [[0 for i in range(0, self.game.width)] for j in range(0, self.game.height)]
+        self.solution = [[0 for i in range(self.game.width)] for j in range(self.game.height)]
 
     def solve_recursive_helper(self, i, j, cells_left):
         if cells_left == 0 and self.game.is_solved():
@@ -37,14 +35,13 @@ class sudoku_solver:
         return False
 
     def solve(self):
-        for row in range(0, self.game.height):
-            for col in range(0, self.game.width):
+        for row in range(self.game.height):
+            for col in range(self.game.width):
                 self.solution[row][col] = 0
 
         res = self.solve_recursive_helper(0, 0, self.game.width * self.game.height)
         if res:
-            for row in range(0, self.game.height):
-                for col in range(0, self.game.width):
+            for row in range(self.game.height):
+                for col in range(self.game.width):
                     self.game.board[row][col] = self.solution[row][col]
         return res
-

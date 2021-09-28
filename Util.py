@@ -5,7 +5,7 @@ def cell_clicked(evt, cells, i, j, gui):
         return
     gui.selected_cell = (i, j)
 
-    for k in range(0, len(cells)):
+    for k in range(len(cells)):
         cells[i][k].configure(bg='#67d5db')
         cells[k][j].configure(bg='#67d5db')
     cell = cells[i][j]
